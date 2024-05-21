@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 
@@ -9,15 +9,15 @@ namespace Lab_9
         public static void Main()
         {
             List<Car> myCars = new List<Car>(){
-            new Car("E250", new Engine(1.8, 204, "CGI"), 2009),
-            new Car("E350", new Engine(3.5, 292, "CGI"), 2009),
-            new Car("A6", new Engine(2.5, 187, "FSI"), 2012),
-            new Car("A6", new Engine(2.8, 220, "FSI"), 2012),
-            new Car("A6", new Engine(3.0, 295, "TFSI"), 2012),
-            new Car("A6", new Engine(2.0, 175, "TDI"), 2011),
-            new Car("A6", new Engine(3.0, 309, "TDI"), 2011),
-            new Car("S6", new Engine(4.0, 414, "TFSI"), 2012),
-            new Car("S8", new Engine(4.0, 513, "TFSI"), 2012)
+                new Car("E250", new Engine(1.8, 204, "CGI"), 2009),
+                new Car("E350", new Engine(3.5, 292, "CGI"), 2009),
+                new Car("A6", new Engine(2.5, 187, "FSI"), 2012),
+                new Car("A6", new Engine(2.8, 220, "FSI"), 2012),
+                new Car("A6", new Engine(3.0, 295, "TFSI"), 2012),
+                new Car("A6", new Engine(2.0, 175, "TDI"), 2011),
+                new Car("A6", new Engine(3.0, 309, "TDI"), 2011),
+                new Car("S6", new Engine(4.0, 414, "TFSI"), 2012),
+                new Car("S8", new Engine(4.0, 513, "TFSI"), 2012)
             };
 
             Console.WriteLine("Task 1: Performing LINEQ Queries ...");
@@ -94,23 +94,16 @@ namespace Lab_9
 
         private static void calulcateXPathOnXML(string fileName)
         {
-            XElement xElement = XElement.Load(fileName);
-            if (xElement.Elements("car").Any())
+            XElement rootNode = XElement.Load(fileName);
+
+            double avgHP = (double)rootNode.XPathEvaluate("sum(//car/engine[@model!=\"TDI\"]/HorsePower) div count(//car/engine[@model!=\"TDI\"]/HorsePower)");
+            Console.WriteLine($"Average HorsePower (excluding TDI): {avgHP}");
+
+            IEnumerable<XElement> models = rootNode.XPathSelectElements("//car[not(Model = preceding::car/Model)]/Model");
+            Console.WriteLine("Unique car models:");
+            foreach (var model in models)
             {
-                double avgHP = (double)xElement.XPathEvaluate("sum(//car[engine/model != 'TDI']/engine/HorsePower) div count(//car[engine/model != 'TDI'])");
-                Console.WriteLine($"Average HorsePower: {avgHP}");
-
-
-                IEnumerable<XElement> models = xElement.XPathSelectElements("//car/engine/model[not(. = following::model)]");
-                foreach (var model in models)
-                {
-                    Console.WriteLine(model.Value);
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("No data provided in the XML document.");
+                Console.WriteLine(model.Value);
             }
         }
 
