@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
@@ -42,6 +42,7 @@ namespace Lab_10
 
             LINQQuery();
             MethodBasedLINQQuery();
+            Delegates();
         }
 
         private void LINQQuery() 
@@ -56,6 +57,7 @@ namespace Lab_10
             foreach (var e in elements)
             {
                 Console.WriteLine(e.engineType + ": " + e.avgHPPL);
+                MessageBox.Show(e.engineType + ": " + e.avgHPPL);
             }
         }
 
@@ -70,6 +72,7 @@ namespace Lab_10
             foreach (var e in elements)
             {
                 Console.WriteLine(e.engineType + ": " + e.avgHPPL);
+                MessageBox.Show(e.engineType + ": " + e.avgHPPL);
             }
         }
 
@@ -116,6 +119,7 @@ namespace Lab_10
         private void Action(Car x)
         { 
             Console.WriteLine(x.Model);
+            MessageBox.Show(x.Model);
         }
 
         private void BindDataToGrid()
